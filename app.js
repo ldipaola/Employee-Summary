@@ -105,31 +105,20 @@ function managerInput() {
     ]);
   }
 
-//   function createEngineer (engineer) {
-//     let myEngineer= new Intern (engineer.name, engineer.id, engineer.email, engineer.github);
-//     return myEngineer;
-    
-//   }
-//   function createIntern(intern) {
-//     let myIntern= new Intern (intern.name, intern.id, intern.email, intern.school);
-//     return myIntern;
-//   }
-
   async function employeeInput () {
      let addEmployee = await askForInput();
-     if (addEmployee.role == "Engineer"){
+     if (addEmployee.role === "Engineer"){
          let engineer = await engineerInput();
-         let myEngineer= new Intern (engineer.name, engineer.id, engineer.email, engineer.github);
+         let myEngineer = new Engineer (engineer.name, engineer.id, engineer.email, engineer.github);
          engineers.push(myEngineer);
          employeeInput();
-     } else if (addEmployee.role == "Intern"){
+     } else if (addEmployee.role === "Intern"){
          let intern = await internInput();
          let myIntern= new Intern (intern.name, intern.id, intern.email, intern.school);
          interns.push(myIntern);
          employeeInput();
      } else {
-        console.log(manager, engineers, interns);
-         return
+        htmlRender(); 
      }
   }
 
@@ -140,7 +129,15 @@ function managerInput() {
         manager.push(myManager);
         employeeInput();
     });
-
+async function htmlRender () {
+    let combinedEmployees = [
+        ...manager,
+        ...engineers,
+        ...interns
+    ];
+    let html = await render(combinedEmployees);
+    writeFileAsync(outputPath, html).then(function(){console.log(outputPath + " successfully created")});
+}
 
 
     
